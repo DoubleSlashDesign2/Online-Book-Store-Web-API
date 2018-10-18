@@ -1,0 +1,511 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Orchard9Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblBook">
+          <Key>
+            <PropertyRef Name="ISBN" />
+          </Key>
+          <Property Name="ISBN" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="BookName" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="Category" Type="varchar" MaxLength="40" />
+          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Rating" Type="float" />
+          <Property Name="Author" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="Publisher" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="500" />
+          <Property Name="BookImageUrl" Type="varchar(max)" />
+          <Property Name="createddate" Type="datetime" />
+          <Property Name="isactive" Type="bit" />
+        </EntityType>
+        <EntityType Name="tblCart">
+          <Key>
+            <PropertyRef Name="CartId" />
+          </Key>
+          <Property Name="CartId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="ISBN" Type="varchar" MaxLength="40" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="PayStatus" Type="bit" />
+        </EntityType>
+        <EntityType Name="tblInvoice">
+          <Key>
+            <PropertyRef Name="InvoiceId" />
+          </Key>
+          <Property Name="InvoiceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CartId" Type="int" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="InvoiceStatus" Type="bit" />
+        </EntityType>
+        <EntityType Name="tblRole">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblUser">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmailId" Type="varchar" MaxLength="320" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="256" />
+          <Property Name="ContactNo" Type="varchar" MaxLength="13" />
+          <Property Name="Gender" Type="varchar" MaxLength="20" />
+          <Property Name="Address" Type="varchar" MaxLength="60" />
+          <Property Name="UserType" Type="varchar" MaxLength="15" />
+          <Property Name="ReferralId" Type="varchar" MaxLength="10" />
+          <Property Name="IsVerified" Type="bit" Nullable="false" />
+          <Property Name="Role" Type="int" Nullable="false" />
+          <Property Name="DateOfBirth" Type="date" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="tblWishlist">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ISBN" Type="varchar" MaxLength="40" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="CurrentPrice" Type="float" />
+        </EntityType>
+        <Association Name="FK__tblCart__ISBN__123EB7A3">
+          <End Role="tblBook" Type="Self.tblBook" Multiplicity="0..1" />
+          <End Role="tblCart" Type="Self.tblCart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBook">
+              <PropertyRef Name="ISBN" />
+            </Principal>
+            <Dependent Role="tblCart">
+              <PropertyRef Name="ISBN" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblCart__UserId__1332DBDC">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="0..1" />
+          <End Role="tblCart" Type="Self.tblCart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="tblCart">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblInvoic__CartI__367C1819">
+          <End Role="tblCart" Type="Self.tblCart" Multiplicity="0..1" />
+          <End Role="tblInvoice" Type="Self.tblInvoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCart">
+              <PropertyRef Name="CartId" />
+            </Principal>
+            <Dependent Role="tblInvoice">
+              <PropertyRef Name="CartId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblInvoic__UserI__37703C52">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="0..1" />
+          <End Role="tblInvoice" Type="Self.tblInvoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="tblInvoice">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblUser__Role__0B91BA14">
+          <End Role="tblRole" Type="Self.tblRole" Multiplicity="1" />
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblRole">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="tblUser">
+              <PropertyRef Name="Role" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblWishli__UserI__0F624AF8">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="1" />
+          <End Role="tblWishlist" Type="Self.tblWishlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="tblWishlist">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblWishlis__ISBN__0E6E26BF">
+          <End Role="tblBook" Type="Self.tblBook" Multiplicity="0..1" />
+          <End Role="tblWishlist" Type="Self.tblWishlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBook">
+              <PropertyRef Name="ISBN" />
+            </Principal>
+            <Dependent Role="tblWishlist">
+              <PropertyRef Name="ISBN" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Orchard9ModelStoreContainer">
+          <EntitySet Name="tblBook" EntityType="Self.tblBook" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblCart" EntityType="Self.tblCart" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblInvoice" EntityType="Self.tblInvoice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblRole" EntityType="Self.tblRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblUser" EntityType="Self.tblUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblWishlist" EntityType="Self.tblWishlist" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__tblCart__ISBN__123EB7A3" Association="Self.FK__tblCart__ISBN__123EB7A3">
+            <End Role="tblBook" EntitySet="tblBook" />
+            <End Role="tblCart" EntitySet="tblCart" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblCart__UserId__1332DBDC" Association="Self.FK__tblCart__UserId__1332DBDC">
+            <End Role="tblUser" EntitySet="tblUser" />
+            <End Role="tblCart" EntitySet="tblCart" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblInvoic__CartI__367C1819" Association="Self.FK__tblInvoic__CartI__367C1819">
+            <End Role="tblCart" EntitySet="tblCart" />
+            <End Role="tblInvoice" EntitySet="tblInvoice" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblInvoic__UserI__37703C52" Association="Self.FK__tblInvoic__UserI__37703C52">
+            <End Role="tblUser" EntitySet="tblUser" />
+            <End Role="tblInvoice" EntitySet="tblInvoice" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblUser__Role__0B91BA14" Association="Self.FK__tblUser__Role__0B91BA14">
+            <End Role="tblRole" EntitySet="tblRole" />
+            <End Role="tblUser" EntitySet="tblUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblWishli__UserI__0F624AF8" Association="Self.FK__tblWishli__UserI__0F624AF8">
+            <End Role="tblUser" EntitySet="tblUser" />
+            <End Role="tblWishlist" EntitySet="tblWishlist" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblWishlis__ISBN__0E6E26BF" Association="Self.FK__tblWishlis__ISBN__0E6E26BF">
+            <End Role="tblBook" EntitySet="tblBook" />
+            <End Role="tblWishlist" EntitySet="tblWishlist" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Orchard9Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Orchard9Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblBooks" EntityType="Orchard9Model.tblBook" />
+          <EntitySet Name="tblCarts" EntityType="Orchard9Model.tblCart" />
+          <EntitySet Name="tblInvoices" EntityType="Orchard9Model.tblInvoice" />
+          <EntitySet Name="tblRoles" EntityType="Orchard9Model.tblRole" />
+          <EntitySet Name="tblUsers" EntityType="Orchard9Model.tblUser" />
+          <EntitySet Name="tblWishlists" EntityType="Orchard9Model.tblWishlist" />
+          <AssociationSet Name="FK__tblCart__ISBN__123EB7A3" Association="Orchard9Model.FK__tblCart__ISBN__123EB7A3">
+            <End Role="tblBook" EntitySet="tblBooks" />
+            <End Role="tblCart" EntitySet="tblCarts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblWishlis__ISBN__0E6E26BF" Association="Orchard9Model.FK__tblWishlis__ISBN__0E6E26BF">
+            <End Role="tblBook" EntitySet="tblBooks" />
+            <End Role="tblWishlist" EntitySet="tblWishlists" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblCart__UserId__1332DBDC" Association="Orchard9Model.FK__tblCart__UserId__1332DBDC">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblCart" EntitySet="tblCarts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblInvoic__CartI__367C1819" Association="Orchard9Model.FK__tblInvoic__CartI__367C1819">
+            <End Role="tblCart" EntitySet="tblCarts" />
+            <End Role="tblInvoice" EntitySet="tblInvoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblInvoic__UserI__37703C52" Association="Orchard9Model.FK__tblInvoic__UserI__37703C52">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblInvoice" EntitySet="tblInvoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblUser__Role__0B91BA14" Association="Orchard9Model.FK__tblUser__Role__0B91BA14">
+            <End Role="tblRole" EntitySet="tblRoles" />
+            <End Role="tblUser" EntitySet="tblUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblWishli__UserI__0F624AF8" Association="Orchard9Model.FK__tblWishli__UserI__0F624AF8">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblWishlist" EntitySet="tblWishlists" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="tblBook">
+          <Key>
+            <PropertyRef Name="ISBN" />
+          </Key>
+          <Property Name="ISBN" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="BookName" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="Category" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Rating" Type="Double" />
+          <Property Name="Author" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="Publisher" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="BookImageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="createddate" Type="DateTime" Precision="3" />
+          <Property Name="isactive" Type="Boolean" />
+          <NavigationProperty Name="tblCarts" Relationship="Orchard9Model.FK__tblCart__ISBN__123EB7A3" FromRole="tblBook" ToRole="tblCart" />
+          <NavigationProperty Name="tblWishlists" Relationship="Orchard9Model.FK__tblWishlis__ISBN__0E6E26BF" FromRole="tblBook" ToRole="tblWishlist" />
+        </EntityType>
+        <EntityType Name="tblCart">
+          <Key>
+            <PropertyRef Name="CartId" />
+          </Key>
+          <Property Name="CartId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="ISBN" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="PayStatus" Type="Boolean" />
+          <NavigationProperty Name="tblBook" Relationship="Orchard9Model.FK__tblCart__ISBN__123EB7A3" FromRole="tblCart" ToRole="tblBook" />
+          <NavigationProperty Name="tblUser" Relationship="Orchard9Model.FK__tblCart__UserId__1332DBDC" FromRole="tblCart" ToRole="tblUser" />
+          <NavigationProperty Name="tblInvoices" Relationship="Orchard9Model.FK__tblInvoic__CartI__367C1819" FromRole="tblCart" ToRole="tblInvoice" />
+        </EntityType>
+        <EntityType Name="tblInvoice">
+          <Key>
+            <PropertyRef Name="InvoiceId" />
+          </Key>
+          <Property Name="InvoiceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CartId" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
+          <NavigationProperty Name="tblCart" Relationship="Orchard9Model.FK__tblInvoic__CartI__367C1819" FromRole="tblInvoice" ToRole="tblCart" />
+          <NavigationProperty Name="tblUser" Relationship="Orchard9Model.FK__tblInvoic__UserI__37703C52" FromRole="tblInvoice" ToRole="tblUser" />
+          <Property Name="InvoiceStatus" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="tblRole">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblUsers" Relationship="Orchard9Model.FK__tblUser__Role__0B91BA14" FromRole="tblRole" ToRole="tblUser" />
+        </EntityType>
+        <EntityType Name="tblUser">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmailId" Type="String" Nullable="false" MaxLength="320" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="ContactNo" Type="String" MaxLength="13" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="UserType" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="ReferralId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="IsVerified" Type="Boolean" Nullable="false" />
+          <Property Name="Role" Type="Int32" Nullable="false" />
+          <Property Name="DateOfBirth" Type="DateTime" Precision="0" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" />
+          <NavigationProperty Name="tblCarts" Relationship="Orchard9Model.FK__tblCart__UserId__1332DBDC" FromRole="tblUser" ToRole="tblCart" />
+          <NavigationProperty Name="tblInvoices" Relationship="Orchard9Model.FK__tblInvoic__UserI__37703C52" FromRole="tblUser" ToRole="tblInvoice" />
+          <NavigationProperty Name="tblRole" Relationship="Orchard9Model.FK__tblUser__Role__0B91BA14" FromRole="tblUser" ToRole="tblRole" />
+          <NavigationProperty Name="tblWishlists" Relationship="Orchard9Model.FK__tblWishli__UserI__0F624AF8" FromRole="tblUser" ToRole="tblWishlist" />
+        </EntityType>
+        <EntityType Name="tblWishlist">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ISBN" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="CurrentPrice" Type="Double" />
+          <NavigationProperty Name="tblBook" Relationship="Orchard9Model.FK__tblWishlis__ISBN__0E6E26BF" FromRole="tblWishlist" ToRole="tblBook" />
+          <NavigationProperty Name="tblUser" Relationship="Orchard9Model.FK__tblWishli__UserI__0F624AF8" FromRole="tblWishlist" ToRole="tblUser" />
+        </EntityType>
+        <Association Name="FK__tblCart__ISBN__123EB7A3">
+          <End Type="Orchard9Model.tblBook" Role="tblBook" Multiplicity="0..1" />
+          <End Type="Orchard9Model.tblCart" Role="tblCart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBook">
+              <PropertyRef Name="ISBN" />
+            </Principal>
+            <Dependent Role="tblCart">
+              <PropertyRef Name="ISBN" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblWishlis__ISBN__0E6E26BF">
+          <End Type="Orchard9Model.tblBook" Role="tblBook" Multiplicity="0..1" />
+          <End Type="Orchard9Model.tblWishlist" Role="tblWishlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBook">
+              <PropertyRef Name="ISBN" />
+            </Principal>
+            <Dependent Role="tblWishlist">
+              <PropertyRef Name="ISBN" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblCart__UserId__1332DBDC">
+          <End Type="Orchard9Model.tblUser" Role="tblUser" Multiplicity="0..1" />
+          <End Type="Orchard9Model.tblCart" Role="tblCart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="tblCart">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblInvoic__CartI__367C1819">
+          <End Type="Orchard9Model.tblCart" Role="tblCart" Multiplicity="0..1" />
+          <End Type="Orchard9Model.tblInvoice" Role="tblInvoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCart">
+              <PropertyRef Name="CartId" />
+            </Principal>
+            <Dependent Role="tblInvoice">
+              <PropertyRef Name="CartId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblInvoic__UserI__37703C52">
+          <End Type="Orchard9Model.tblUser" Role="tblUser" Multiplicity="0..1" />
+          <End Type="Orchard9Model.tblInvoice" Role="tblInvoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="tblInvoice">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblUser__Role__0B91BA14">
+          <End Type="Orchard9Model.tblRole" Role="tblRole" Multiplicity="1" />
+          <End Type="Orchard9Model.tblUser" Role="tblUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblRole">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="tblUser">
+              <PropertyRef Name="Role" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblWishli__UserI__0F624AF8">
+          <End Type="Orchard9Model.tblUser" Role="tblUser" Multiplicity="1" />
+          <End Type="Orchard9Model.tblWishlist" Role="tblWishlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="tblWishlist">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Orchard9ModelStoreContainer" CdmEntityContainer="Orchard9Entities">
+          <EntitySetMapping Name="tblBooks">
+            <EntityTypeMapping TypeName="Orchard9Model.tblBook">
+              <MappingFragment StoreEntitySet="tblBook">
+                <ScalarProperty Name="isactive" ColumnName="isactive" />
+                <ScalarProperty Name="createddate" ColumnName="createddate" />
+                <ScalarProperty Name="BookImageUrl" ColumnName="BookImageUrl" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Publisher" ColumnName="Publisher" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="BookName" ColumnName="BookName" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblCarts">
+            <EntityTypeMapping TypeName="Orchard9Model.tblCart">
+              <MappingFragment StoreEntitySet="tblCart">
+                <ScalarProperty Name="PayStatus" ColumnName="PayStatus" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="CartId" ColumnName="CartId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblInvoices">
+            <EntityTypeMapping TypeName="Orchard9Model.tblInvoice">
+              <MappingFragment StoreEntitySet="tblInvoice">
+                <ScalarProperty Name="InvoiceStatus" ColumnName="InvoiceStatus" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CartId" ColumnName="CartId" />
+                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblRoles">
+            <EntityTypeMapping TypeName="Orchard9Model.tblRole">
+              <MappingFragment StoreEntitySet="tblRole">
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUsers">
+            <EntityTypeMapping TypeName="Orchard9Model.tblUser">
+              <MappingFragment StoreEntitySet="tblUser">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="IsVerified" ColumnName="IsVerified" />
+                <ScalarProperty Name="ReferralId" ColumnName="ReferralId" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblWishlists">
+            <EntityTypeMapping TypeName="Orchard9Model.tblWishlist">
+              <MappingFragment StoreEntitySet="tblWishlist">
+                <ScalarProperty Name="CurrentPrice" ColumnName="CurrentPrice" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

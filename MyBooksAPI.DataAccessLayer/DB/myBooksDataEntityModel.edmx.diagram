@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f3517a840c354a3584579baa6bc2a774" Name="Diagram1" ZoomLevel="77">
+        <EntityTypeShape EntityType="Orchard9Model.tblBook" Width="1.5" PointX="6" PointY="7.125" />
+        <EntityTypeShape EntityType="Orchard9Model.tblCart" Width="1.5" PointX="8.25" PointY="2.5" />
+        <EntityTypeShape EntityType="Orchard9Model.tblInvoice" Width="1.5" PointX="10.5" PointY="2.875" />
+        <EntityTypeShape EntityType="Orchard9Model.tblRole" Width="1.5" PointX="0.75" PointY="3" />
+        <EntityTypeShape EntityType="Orchard9Model.tblUser" Width="1.5" PointX="3" PointY="1.625" />
+        <EntityTypeShape EntityType="Orchard9Model.tblWishlist" Width="1.5" PointX="5.25" PointY="2.75" />
+        <AssociationConnector Association="Orchard9Model.FK__tblCart__ISBN__123EB7A3" />
+        <AssociationConnector Association="Orchard9Model.FK__tblWishlis__ISBN__0E6E26BF" />
+        <AssociationConnector Association="Orchard9Model.FK__tblCart__UserId__1332DBDC" />
+        <AssociationConnector Association="Orchard9Model.FK__tblInvoic__CartI__367C1819" />
+        <AssociationConnector Association="Orchard9Model.FK__tblInvoic__UserI__37703C52" />
+        <AssociationConnector Association="Orchard9Model.FK__tblUser__Role__0B91BA14" />
+        <AssociationConnector Association="Orchard9Model.FK__tblWishli__UserI__0F624AF8" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
